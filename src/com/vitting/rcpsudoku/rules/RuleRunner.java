@@ -15,6 +15,7 @@ package com.vitting.rcpsudoku.rules;
 
 import com.vitting.rcpsudoku.jfc.utils.Logger;
 import com.vitting.rcpsudoku.model.*;
+import com.vitting.rcpsudoku.rules.rule3.Rule3;
 import com.vitting.rcpsudoku.rules.rule4.Rule4;
 
 /**
