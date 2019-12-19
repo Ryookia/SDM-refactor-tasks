@@ -13,47 +13,22 @@
  */
 package com.vitting.rcpsudoku.jfc;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.util.Vector;
+import com.vitting.rcpsudoku.jfc.actions.*;
+import com.vitting.rcpsudoku.jfc.runner.ActionRunner;
+import com.vitting.rcpsudoku.model.Coordinate;
+import com.vitting.rcpsudoku.model.SudokuBase;
+import com.vitting.rcpsudoku.model.SudokuException;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.Vector;
 
-import com.vitting.rcpsudoku.jfc.actions.ClearAction;
-import com.vitting.rcpsudoku.jfc.actions.IAction;
-import com.vitting.rcpsudoku.jfc.actions.LoadAction;
-import com.vitting.rcpsudoku.jfc.actions.ModeEditAction;
-import com.vitting.rcpsudoku.jfc.actions.NewAction;
-import com.vitting.rcpsudoku.jfc.actions.SaveAction;
 // import com.vitting.rcpsudoku.jfc.test.Test;
-import com.vitting.rcpsudoku.model.*;
 
 /**
  * 
