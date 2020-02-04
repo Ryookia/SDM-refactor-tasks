@@ -21,22 +21,22 @@ public class SudokuException extends Exception {
 	
 	static final public int SEVERITY_ERROR = 0;
     static final public int SEVERITY_QUESTION = 1;
-    static final public int SEVERITY_WARNING = 2;
-    static final public int SEVERITY_INFORMATION = 4;
-    
-    static final public int DISPOSITION_TERMINATE = 0;
-    static final public int DISPOSITION_RETRY = 1;
-    static final public int DISPOSITION_CONTINUE = 2;
-    
-    private int disposition = DISPOSITION_TERMINATE;
-    private int severity = SEVERITY_ERROR;
-	
-	private Vector coordinates = null;
+	static final public int SEVERITY_WARNING = 2;
+	static final public int SEVERITY_INFORMATION = 4;
+
+	static final public int DISPOSITION_TERMINATE = 0;
+	static final public int DISPOSITION_RETRY = 1;
+	static final public int DISPOSITION_CONTINUE = 2;
+
+	private int disposition = DISPOSITION_TERMINATE;
+	private int severity = SEVERITY_ERROR;
+
+	private Vector<Coordinate> coordinates = null;
 	private boolean exceptonHandled = false;
 
 	/**
-	 * Constructor for SudokuException 
-	 *  
+	 * Constructor for SudokuException
+	 *
 	 * @param message
 	 */
 	public SudokuException(String message) {
@@ -109,14 +109,14 @@ public class SudokuException extends Exception {
         this.coordinates = coordinates;
         this.severity = severity;
         this.disposition = disposition;
-    }
-    
+	}
+
 	/**
 	 * @return a Vector of coordinates in error
 	 */
-	public Vector getCoordinates() {
+	public Vector<Coordinate> getCoordinates() {
 		if (coordinates == null) {
-			return new Vector();
+			return new Vector<>();
 		}
 		return coordinates;
 	}

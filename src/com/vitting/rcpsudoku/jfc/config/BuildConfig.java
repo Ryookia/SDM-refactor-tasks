@@ -1,14 +1,14 @@
-package com.vitting.rcpsudoku.config;
+package com.vitting.rcpsudoku.jfc.config;
 
 
-public static class BuildConfig {
-  private final static Boolean isDebug = false;
+public class BuildConfig {
+  private Boolean isDebug = false;
 
-  public setIsDebug(Boolean isDebug){
-    this.isDebug = isDebug;
+  public boolean getIsDebug() {
+    return this.isDebug;
   }
 
-  public getIsDebug(){
-    return this.isDebug;
+  public void setIsDebug(Boolean isDebug) {
+    this.isDebug = isDebug;
   }
 }

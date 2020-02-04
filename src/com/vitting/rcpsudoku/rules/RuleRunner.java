@@ -13,33 +13,65 @@
  */
 package com.vitting.rcpsudoku.rules;
 
-import com.vitting.rcpsudoku.model.IRule;
-import com.vitting.rcpsudoku.model.SudokuBase;
-import com.vitting.rcpsudoku.model.SudokuException;
-import com.vitting.rcpsudoku.model.IRuleExtension;
-import com.vitting.rcpsudoku.model.VerifyGame;
-import com.vitting.rcpsudoku.model.VerifyGameComplete;
+import com.vitting.rcpsudoku.jfc.utils.Logger;
+import com.vitting.rcpsudoku.model.*;
+import com.vitting.rcpsudoku.rules.rule3.Rule3;
+import com.vitting.rcpsudoku.rules.rule4.Rule4;
 
 /**
- * 
  * Run the rules in this plugin
  */
 public class RuleRunner implements IRuleExtension {
 
-	static private IRule[] rules = new IRule[] { new Rule1(), new Rule2(),
-			new Rule3() };
+	static private IRule[] rules = new IRule[]{new Rule1(), new Rule2(),
+			new Rule3()};
 
 	static SudokuBase base = SudokuBase.getSingleInstance();
+
+	private Logger logger;
 
 	/**
 	 * Constructor
 	 */
-	public RuleRunner() {
+	public RuleRunner(Logger logger) {
+		this.logger = logger;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
+	 * @see com.vitting.rcpsudoku.model.IRuleExtension#run()
+	 */
+	public static int internalrun() throws SudokuException {
+		int result = IRule.RULE_NO_CHANGE;
+		runrun:
+		while (true) {
+			for (int i = 0; i < rules.length; i++) {
+				result = runRule(i);
+//				{ // DEBUG -- Rule 1 - 3 result
+//				  System.out.println("Rule " + i + " " + result);
+//				}
+				switch (result) {
+					case IRule.RULE_CELL_CHANGED:
+						continue runrun;
+					case IRule.RULE_NOT_POSSIBLE:
+						break runrun;
+					default:
+						// No more changes, check for a solution
+						if (new VerifyGameComplete().verifyAll() == IRule.RULE_GAME_COMPLETE) {
+							result = IRule.RULE_GAME_COMPLETE;
+							break runrun;
+						}
+				}
+			}
+			break;
+		}
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see com.vitting.rcpsudoku.model.IRuleExtension#run()
 	 */
 	public int run() throws SudokuException {
@@ -48,7 +80,7 @@ public class RuleRunner implements IRuleExtension {
 		try {
 			// Clear the stack
 			base.clearStack();
-			
+
 			// Set solveMode
 			base.setSolveMode(true);
 
@@ -59,21 +91,21 @@ public class RuleRunner implements IRuleExtension {
 			result = internalrun();
 
 			switch (result) {
-			case IRule.RULE_NO_CHANGE:
-				// Call VerifyGame()
-				new VerifyGame().verifyAll(false);
+				case IRule.RULE_NO_CHANGE:
+					// Call VerifyGame()
+					new VerifyGame().verifyAll(false);
 
-				// Run rule 4
-				result = new Rule4().run();
-				break;
-			case IRule.RULE_CELL_CHANGED:
-				throw new SudokuException(
-						"RULE_CELL_CHANGED returned from RuleRunner#internalRun");
-			case IRule.RULE_NOT_POSSIBLE:
-				base.popStack();
-				break;
-			default:
-				// IRule.RULE_GAME_COMPLETE:
+					// Run rule 4
+					result = new Rule4(logger).run();
+					break;
+				case IRule.RULE_CELL_CHANGED:
+					throw new SudokuException(
+							"RULE_CELL_CHANGED returned from RuleRunner#internalRun");
+				case IRule.RULE_NOT_POSSIBLE:
+					base.popStack();
+					break;
+				default:
+					// IRule.RULE_GAME_COMPLETE:
 			}
 			return result;
 		} finally {
@@ -84,37 +116,6 @@ public class RuleRunner implements IRuleExtension {
 //				System.out.println("RuleRunner#Run returns: " + result);
 //			}
 		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.vitting.rcpsudoku.model.IRuleExtension#run()
-	 */
-	static protected int internalrun() throws SudokuException {
-		int result = IRule.RULE_NO_CHANGE;
-		runrun: while (true) {
-			for (int i = 0; i < rules.length; i++) {
-				result = runRule(i);
-//				{ // DEBUG -- Rule 1 - 3 result
-//				  System.out.println("Rule " + i + " " + result);
-//				}
-				switch (result) {
-				case IRule.RULE_CELL_CHANGED:
-					continue runrun;
-				case IRule.RULE_NOT_POSSIBLE:
-					break runrun;
-				default:
-					// No more changes, check for a solution
-					if (new VerifyGameComplete().verifyAll() == IRule.RULE_GAME_COMPLETE) {
-						result = IRule.RULE_GAME_COMPLETE;
-						break runrun;
-					}
-				}
-			}
-			break;
-		}
-		return result;
 	}
 
 	/**
